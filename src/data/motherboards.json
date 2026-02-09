@@ -1,0 +1,78 @@
+[
+  {
+    "id": "mb_1",
+    "name": "ASUS ROG STRIX B550-F",
+    "type": "motherboard",
+    "socket": "AM4",
+    "ramType": "DDR4",
+    "ramSlots": 4,
+    "maxRamCapacity": 128,
+    "pciSlots": 3,
+    "sataSlots": 6,
+    "m2Slots": 2,
+    "formFactor": "ATX",
+    "maxTDP": 105,
+    "price": 75000
+  },
+  {
+    "id": "mb_2",
+    "name": "MSI MAG B660M MORTAR",
+    "type": "motherboard",
+    "socket": "LGA1700",
+    "ramType": "DDR4",
+    "ramSlots": 4,
+    "maxRamCapacity": 128,
+    "pciSlots": 2,
+    "sataSlots": 4,
+    "m2Slots": 2,
+    "formFactor": "Micro-ATX",
+    "maxTDP": 125,
+    "price": 65000
+  },
+  {
+    "id": "mb_3",
+    "name": "GIGABYTE Z690 AORUS ELITE",
+    "type": "motherboard",
+    "socket": "LGA1700",
+    "ramType": "DDR5",
+    "ramSlots": 4,
+    "maxRamCapacity": 128,
+    "pciSlots": 3,
+    "sataSlots": 6,
+    "m2Slots": 4,
+    "formFactor": "ATX",
+    "maxTDP": 125,
+    "price": 95000
+  },
+  {
+    "id": "mb_4",
+    "name": "ASRock B450M Pro4",
+    "type": "motherboard",
+    "socket": "AM4",
+    "ramType": "DDR4",
+    "ramSlots": 4,
+    "maxRamCapacity": 64,
+    "pciSlots": 2,
+    "sataSlots": 4,
+    "m2Slots": 1,
+    "formFactor": "Micro-ATX",
+    "maxTDP": 95,
+    "price": 35000
+  },
+  {
+    "id": "mb_5",
+    "name": "ASUS PRIME X670-P",
+    "type": "motherboard",
+    "socket": "AM5",
+    "ramType": "DDR5",
+    "ramSlots": 4,
+    "maxRamCapacity": 128,
+    "pciSlots": 3,
+    "sataSlots": 4,
+    "m2Slots": 3,
+    "formFactor": "ATX",
+    "maxTDP": 170,
+    "price": 110000
+  }
+]
+

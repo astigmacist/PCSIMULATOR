@@ -1,0 +1,53 @@
+[
+  {
+    "id": "storage_1",
+    "name": "Samsung 970 EVO Plus 1TB NVMe",
+    "type": "storage",
+    "interface": "NVMe",
+    "capacity": 1000,
+    "readSpeed": 3500,
+    "writeSpeed": 3300,
+    "price": 45000
+  },
+  {
+    "id": "storage_2",
+    "name": "WD Blue 1TB SATA SSD",
+    "type": "storage",
+    "interface": "SATA",
+    "capacity": 1000,
+    "readSpeed": 560,
+    "writeSpeed": 530,
+    "price": 28000
+  },
+  {
+    "id": "storage_3",
+    "name": "Kingston A2000 500GB NVMe",
+    "type": "storage",
+    "interface": "NVMe",
+    "capacity": 500,
+    "readSpeed": 2200,
+    "writeSpeed": 2000,
+    "price": 20000
+  },
+  {
+    "id": "storage_4",
+    "name": "Seagate Barracuda 2TB HDD",
+    "type": "storage",
+    "interface": "SATA",
+    "capacity": 2000,
+    "readSpeed": 210,
+    "writeSpeed": 210,
+    "price": 18000
+  },
+  {
+    "id": "storage_5",
+    "name": "Samsung 980 PRO 2TB NVMe",
+    "type": "storage",
+    "interface": "NVMe",
+    "capacity": 2000,
+    "readSpeed": 7000,
+    "writeSpeed": 5100,
+    "price": 95000
+  }
+]
+

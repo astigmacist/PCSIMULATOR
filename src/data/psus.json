@@ -1,0 +1,48 @@
+[
+  {
+    "id": "psu_1",
+    "name": "Corsair RM750x 750W",
+    "type": "psu",
+    "wattage": 750,
+    "efficiency": "80+ Gold",
+    "modular": true,
+    "price": 55000
+  },
+  {
+    "id": "psu_2",
+    "name": "EVGA 600 BQ 600W",
+    "type": "psu",
+    "wattage": 600,
+    "efficiency": "80+ Bronze",
+    "modular": false,
+    "price": 30000
+  },
+  {
+    "id": "psu_3",
+    "name": "Seasonic FOCUS GX-850 850W",
+    "type": "psu",
+    "wattage": 850,
+    "efficiency": "80+ Gold",
+    "modular": true,
+    "price": 65000
+  },
+  {
+    "id": "psu_4",
+    "name": "Thermaltake Smart 500W",
+    "type": "psu",
+    "wattage": 500,
+    "efficiency": "80+ Bronze",
+    "modular": false,
+    "price": 22000
+  },
+  {
+    "id": "psu_5",
+    "name": "be quiet! Dark Power Pro 12 1200W",
+    "type": "psu",
+    "wattage": 1200,
+    "efficiency": "80+ Platinum",
+    "modular": true,
+    "price": 120000
+  }
+]
+

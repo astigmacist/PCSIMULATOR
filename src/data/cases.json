@@ -1,0 +1,39 @@
+[
+  {
+    "id": "case_1",
+    "name": "NZXT H510",
+    "type": "case",
+    "formFactor": ["ATX", "Micro-ATX", "Mini-ITX"],
+    "maxGPULength": 381,
+    "driveBays": 4,
+    "price": 35000
+  },
+  {
+    "id": "case_2",
+    "name": "Lian Li O11 Dynamic",
+    "type": "case",
+    "formFactor": ["ATX"],
+    "maxGPULength": 420,
+    "driveBays": 3,
+    "price": 55000
+  },
+  {
+    "id": "case_3",
+    "name": "Fractal Design Meshify C",
+    "type": "case",
+    "formFactor": ["ATX", "Micro-ATX", "Mini-ITX"],
+    "maxGPULength": 315,
+    "driveBays": 4,
+    "price": 40000
+  },
+  {
+    "id": "case_4",
+    "name": "Corsair 4000D Airflow",
+    "type": "case",
+    "formFactor": ["ATX", "Micro-ATX", "Mini-ITX"],
+    "maxGPULength": 360,
+    "driveBays": 6,
+    "price": 45000
+  }
+]
+

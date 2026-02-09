@@ -1,0 +1,53 @@
+[
+  {
+    "id": "gpu_1",
+    "name": "NVIDIA GeForce RTX 3060 Ti",
+    "type": "gpu",
+    "powerConsumption": 200,
+    "length": 242,
+    "slots": 2,
+    "manufacturer": "NVIDIA",
+    "price": 180000
+  },
+  {
+    "id": "gpu_2",
+    "name": "NVIDIA GeForce RTX 4070",
+    "type": "gpu",
+    "powerConsumption": 200,
+    "length": 267,
+    "slots": 2,
+    "manufacturer": "NVIDIA",
+    "price": 280000
+  },
+  {
+    "id": "gpu_3",
+    "name": "AMD Radeon RX 7800 XT",
+    "type": "gpu",
+    "powerConsumption": 263,
+    "length": 287,
+    "slots": 2,
+    "manufacturer": "AMD",
+    "price": 240000
+  },
+  {
+    "id": "gpu_4",
+    "name": "NVIDIA GeForce RTX 4090",
+    "type": "gpu",
+    "powerConsumption": 450,
+    "length": 336,
+    "slots": 3,
+    "manufacturer": "NVIDIA",
+    "price": 850000
+  },
+  {
+    "id": "gpu_5",
+    "name": "AMD Radeon RX 6600",
+    "type": "gpu",
+    "powerConsumption": 132,
+    "length": 190,
+    "slots": 2,
+    "manufacturer": "AMD",
+    "price": 120000
+  }
+]
+

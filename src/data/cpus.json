@@ -1,0 +1,75 @@
+[
+  {
+    "id": "cpu_1",
+    "name": "AMD Ryzen 5 5600X",
+    "type": "cpu",
+    "socket": "AM4",
+    "tdp": 65,
+    "cores": 6,
+    "threads": 12,
+    "baseFrequency": 3.7,
+    "manufacturer": "AMD",
+    "price": 85000
+  },
+  {
+    "id": "cpu_2",
+    "name": "AMD Ryzen 7 5800X3D",
+    "type": "cpu",
+    "socket": "AM4",
+    "tdp": 105,
+    "cores": 8,
+    "threads": 16,
+    "baseFrequency": 3.4,
+    "manufacturer": "AMD",
+    "price": 180000
+  },
+  {
+    "id": "cpu_3",
+    "name": "Intel Core i5-12400F",
+    "type": "cpu",
+    "socket": "LGA1700",
+    "tdp": 65,
+    "cores": 6,
+    "threads": 12,
+    "baseFrequency": 2.5,
+    "manufacturer": "Intel",
+    "price": 75000
+  },
+  {
+    "id": "cpu_4",
+    "name": "Intel Core i7-12700K",
+    "type": "cpu",
+    "socket": "LGA1700",
+    "tdp": 125,
+    "cores": 12,
+    "threads": 20,
+    "baseFrequency": 3.6,
+    "manufacturer": "Intel",
+    "price": 160000
+  },
+  {
+    "id": "cpu_5",
+    "name": "AMD Ryzen 5 7600X",
+    "type": "cpu",
+    "socket": "AM5",
+    "tdp": 105,
+    "cores": 6,
+    "threads": 12,
+    "baseFrequency": 4.7,
+    "manufacturer": "AMD",
+    "price": 120000
+  },
+  {
+    "id": "cpu_6",
+    "name": "AMD Ryzen 9 7950X",
+    "type": "cpu",
+    "socket": "AM5",
+    "tdp": 170,
+    "cores": 16,
+    "threads": 32,
+    "baseFrequency": 4.5,
+    "manufacturer": "AMD",
+    "price": 280000
+  }
+]
+
