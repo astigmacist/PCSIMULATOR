@@ -1,6 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBuild } from '../context/BuildContext';
+import {
+  checkCPUCompatibility,
+  checkRAMCompatibility,
+  checkGPUCompatibility,
+  checkStorageCompatibility,
+  checkCaseCompatibility,
+} from '../logic/compatibility';
 import ComponentSelection from './ComponentSelection';
 import PCCaseView from './PCCaseView';
 import StatusPanel from './StatusPanel';
@@ -13,7 +20,18 @@ import { Challenge } from '../types/tutorial';
 
 function PCSimulator() {
   const navigate = useNavigate();
-  const { build, resetBuild, compatibility } = useBuild();
+  const {
+    build,
+    resetBuild,
+    compatibility,
+    installCase,
+    installMotherboard,
+    installCPU,
+    installRAM,
+    installGPU,
+    installPSU,
+    installStorage
+  } = useBuild();
   const [showTutorial, setShowTutorial] = useState(false);
   const [showChallenges, setShowChallenges] = useState(false);
   const [showTraining, setShowTraining] = useState(false);
@@ -41,8 +59,100 @@ function PCSimulator() {
     return { total, done, percent: total ? Math.round((done / total) * 100) : 0 };
   }, [activeChallenge, build, compatibility.compatible]);
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const type = e.dataTransfer.getData('componentType');
+    const dataStr = e.dataTransfer.getData('componentData');
+
+    if (!type || !dataStr) return;
+
+    try {
+      const data = JSON.parse(dataStr);
+
+      switch (type) {
+        case 'case':
+          if (build.motherboard) {
+            const error = checkCaseCompatibility(data, build.motherboard);
+            if (error) {
+              alert(`❌ ${error.reason}\n\n💡 ${error.recommendations?.join('\n')}`);
+              return;
+            }
+          }
+          installCase(data);
+          break;
+
+        case 'motherboard':
+          installMotherboard(data);
+          break;
+
+        case 'cpu':
+          if (!build.motherboard) {
+            alert('Сначала установите материнскую плату!');
+            return;
+          }
+          const cpuError = checkCPUCompatibility(data, build.motherboard);
+          if (cpuError) {
+            alert(`❌ ${cpuError.reason}\n\n💡 ${cpuError.recommendations?.join('\n')}`);
+            return;
+          }
+          installCPU(data);
+          break;
+
+        case 'ram':
+          if (!build.motherboard) {
+            alert('Сначала установите материнскую плату!');
+            return;
+          }
+          const ramError = checkRAMCompatibility(data, build.motherboard, build.ram);
+          if (ramError) {
+            alert(`❌ ${ramError.reason}\n\n💡 ${ramError.recommendations?.join('\n')}`);
+            return;
+          }
+          installRAM(data);
+          break;
+
+        case 'gpu':
+          if (!build.motherboard) {
+            alert('Сначала установите материнскую плату!');
+            return;
+          }
+          const gpuError = checkGPUCompatibility(data, build.motherboard, build.case);
+          if (gpuError) {
+            alert(`❌ ${gpuError.reason}\n\n💡 ${gpuError.recommendations?.join('\n')}`);
+            return;
+          }
+          installGPU(data);
+          break;
+
+        case 'psu':
+          installPSU(data);
+          break;
+
+        case 'storage':
+          if (!build.motherboard) {
+            alert('Сначала установите материнскую плату!');
+            return;
+          }
+          const storageError = checkStorageCompatibility(data, build.motherboard, build.storage);
+          if (storageError) {
+            alert(`❌ ${storageError.reason}\n\n💡 ${storageError.recommendations?.join('\n')}`);
+            return;
+          }
+          installStorage(data);
+          break;
+      }
+    } catch (err) {
+      console.error('Error processing drop:', err);
+    }
+  };
+
   const totalPrice = calculateTotalPrice(build);
-  const isComplete = 
+  const isComplete =
     build.motherboard !== null &&
     build.cpu !== null &&
     build.ram.length > 0 &&
@@ -54,8 +164,8 @@ function PCSimulator() {
       <header className="header">
         <div className="header-content">
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <button 
-              className="btn btn-secondary" 
+            <button
+              className="btn btn-secondary"
               onClick={() => navigate('/')}
               title="Вернуться на главную"
             >
@@ -64,14 +174,14 @@ function PCSimulator() {
             <h1> Симулятор Сборки ПК</h1>
           </div>
           <div className="header-actions">
-            <button 
-              className="btn" 
+            <button
+              className="btn"
               onClick={() => setView3D(!view3D)}
-              style={{ 
-                background: view3D 
-                  ? 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)' 
+              style={{
+                background: view3D
+                  ? 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)'
                   : 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
-                boxShadow: view3D 
+                boxShadow: view3D
                   ? '0 4px 15px rgba(139, 92, 246, 0.4)'
                   : '0 4px 15px rgba(107, 114, 128, 0.4)'
               }}
@@ -81,13 +191,13 @@ function PCSimulator() {
             <button className="btn btn-secondary" onClick={resetBuild}>
               🔄 Сбросить
             </button>
-            <button 
-              className="btn" 
+            <button
+              className="btn"
               onClick={() => {
                 setShowChallenges(true);
                 setShowTraining(false);
               }}
-              style={{ 
+              style={{
                 background: 'linear-gradient(135deg, #27272a 0%, #18181b 100%)',
                 border: '1px solid #3f3f46'
               }}
@@ -107,10 +217,10 @@ function PCSimulator() {
             >
               📘 Обучение
             </button>
-            <button 
-              className="btn" 
+            <button
+              className="btn"
               onClick={() => setShowTutorial(!showTutorial)}
-              style={{ 
+              style={{
                 background: 'linear-gradient(135deg, #27272a 0%, #18181b 100%)',
                 border: '1px solid #3f3f46'
               }}
@@ -172,23 +282,33 @@ function PCSimulator() {
             )}
             <div className="main-container">
               <ComponentSelection view3D={view3D} />
-              
+
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {view3D ? (
-                  <div className="pc-case-container" style={{ minHeight: '600px' }}>
-                    <h2>🎮 3D Визуализация</h2>
+                  <div
+                    className="pc-case-container"
+                    style={{ minHeight: '400px', height: '35vh', border: '2px dashed #4b5563', borderRadius: '12px' }}
+                    onDragOver={handleDragOver}
+                    onDrop={handleDrop}
+                  >
+                    <div style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: 10, pointerEvents: 'none' }}>
+                      <h2 style={{ margin: 0, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>🎮 3D Студия</h2>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#9ca3af', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                        Перетащите компоненты сюда
+                      </p>
+                    </div>
                     <Scene3D className="pc-case" />
                   </div>
                 ) : (
                   <PCCaseView showOrderHints={!!activeChallenge} />
                 )}
-                
+
                 <CompatibilityPanel compatibility={compatibility} />
               </div>
             </div>
-            
-            <StatusPanel 
-              build={build} 
+
+            <StatusPanel
+              build={build}
               totalPrice={totalPrice}
               isComplete={isComplete}
             />
@@ -197,7 +317,7 @@ function PCSimulator() {
       </div>
 
       {showTutorial && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             top: 0,
@@ -212,7 +332,7 @@ function PCSimulator() {
           }}
           onClick={() => setShowTutorial(false)}
         >
-          <div 
+          <div
             style={{
               background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
               padding: '2rem',
@@ -249,8 +369,8 @@ function PCSimulator() {
                 ⚠️ Система автоматически проверит совместимость компонентов и подскажет, если что-то не подходит!
               </p>
             </div>
-            <button 
-              className="btn btn-primary" 
+            <button
+              className="btn btn-primary"
               onClick={() => setShowTutorial(false)}
               style={{ marginTop: '1.5rem', width: '100%' }}
             >
