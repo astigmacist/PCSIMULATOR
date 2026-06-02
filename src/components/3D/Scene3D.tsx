@@ -12,10 +12,15 @@ export function Scene3D({ className }: Scene3DProps) {
       <Canvas
         shadows
         gl={{ antialias: true, alpha: false }}
-        style={{ background: 'linear-gradient(180deg, #0f0f12 0%, #1a1a1f 100%)' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          background: 'linear-gradient(180deg, #0f0f12 0%, #1a1a1f 100%)',
+        }}
       >
         {/* Камера */}
-        <PerspectiveCamera makeDefault position={[4, 3, 5]} fov={60} />
+        <PerspectiveCamera makeDefault position={[5.2, 2.7, 6.2]} fov={45} />
 
         {/* Управление камерой */}
         <OrbitControls
@@ -25,7 +30,7 @@ export function Scene3D({ className }: Scene3DProps) {
           minDistance={2}
           maxDistance={12}
           maxPolarAngle={Math.PI / 1.8}
-          target={[0, 2.5, 0]}
+          target={[0, 0, 0]}
           autoRotate={false}
         />
 
@@ -89,4 +94,3 @@ export function Scene3D({ className }: Scene3DProps) {
     </div>
   );
 }
-

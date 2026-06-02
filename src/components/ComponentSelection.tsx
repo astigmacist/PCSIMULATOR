@@ -25,11 +25,7 @@ import {
   checkCaseCompatibility,
 } from '../logic/compatibility';
 
-interface ComponentSelectionProps {
-  view3D?: boolean;
-}
-
-function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
+function ComponentSelection() {
   const {
     build,
     installMotherboard,
@@ -46,8 +42,6 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
     new Set(['case']) // По умолчанию открыт только корпус
   );
 
-  const [draggedItem, setDraggedItem] = useState<{ type: string; data: any } | null>(null);
-
   const toggleCategory = (category: string) => {
     setExpandedCategories(prev => {
       const newSet = new Set(prev);
@@ -61,7 +55,6 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
   };
 
   const handleDragStart = (e: React.DragEvent, type: string, data: any) => {
-    setDraggedItem({ type, data });
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('componentType', type);
     e.dataTransfer.setData('componentData', JSON.stringify(data));
@@ -72,12 +65,20 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
   };
 
   const handleDragEnd = (e: React.DragEvent) => {
-    setDraggedItem(null);
     const target = e.currentTarget as HTMLElement;
     target.style.opacity = '1';
   };
 
   const handleInstallMotherboard = (mb: Motherboard) => {
+    if (!build.case) {
+      alert('Сначала выберите корпус!');
+      return;
+    }
+    const error = checkCaseCompatibility(build.case, mb);
+    if (error) {
+      alert(`❌ ${error.reason}\n\n💡 ${error.recommendations?.join('\n')}`);
+      return;
+    }
     installMotherboard(mb);
   };
 
@@ -148,9 +149,8 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
     <div className="component-selection">
       <h2>Выбор комплектующих</h2>
 
-      {/* Корпуса - только для 3D режима */}
-      {view3D && (
-        <div className="component-category-accordion">
+      {/* Корпуса */}
+      <div className="component-category-accordion">
           <div 
             className="category-header"
             onClick={() => toggleCategory('case')}
@@ -168,6 +168,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
                 key={pcCase.id}
                 className={`component-item ${build.case?.id === pcCase.id ? 'selected' : ''}`}
                 draggable
+                onClick={() => handleInstallCase(pcCase)}
                 onDragStart={(e) => handleDragStart(e, 'case', pcCase)}
                 onDragEnd={handleDragEnd}
               >
@@ -183,8 +184,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
             ))}
             </div>
           )}
-        </div>
-      )}
+      </div>
 
       {/* Материнские платы */}
       <div className="component-category-accordion">
@@ -205,6 +205,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
               key={mb.id}
               className={`component-item ${build.motherboard?.id === mb.id ? 'selected' : ''}`}
               draggable
+              onClick={() => handleInstallMotherboard(mb)}
               onDragStart={(e) => handleDragStart(e, 'motherboard', mb)}
               onDragEnd={handleDragEnd}
             >
@@ -245,6 +246,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
                   isIncompatible ? 'incompatible' : ''
                 }`}
                 draggable={!isIncompatible}
+                onClick={() => !isIncompatible && handleInstallCPU(cpu)}
                 onDragStart={(e) => handleDragStart(e, 'cpu', cpu)}
                 onDragEnd={handleDragEnd}
               >
@@ -286,6 +288,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
                   build.ram.find((r) => r.id === ram.id) ? 'selected' : ''
                 } ${isIncompatible ? 'incompatible' : ''}`}
                 draggable={!isIncompatible}
+                onClick={() => !isIncompatible && handleInstallRAM(ram)}
                 onDragStart={(e) => handleDragStart(e, 'ram', ram)}
                 onDragEnd={handleDragEnd}
               >
@@ -323,6 +326,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
               key={gpu.id}
               className={`component-item ${build.gpu?.id === gpu.id ? 'selected' : ''}`}
               draggable
+              onClick={() => handleInstallGPU(gpu)}
               onDragStart={(e) => handleDragStart(e, 'gpu', gpu)}
               onDragEnd={handleDragEnd}
             >
@@ -361,6 +365,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
                 build.storage.find((s) => s.id === storage.id) ? 'selected' : ''
               }`}
               draggable
+              onClick={() => handleInstallStorage(storage)}
               onDragStart={(e) => handleDragStart(e, 'storage', storage)}
               onDragEnd={handleDragEnd}
             >
@@ -397,6 +402,7 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
               key={psu.id}
               className={`component-item ${build.psu?.id === psu.id ? 'selected' : ''}`}
               draggable
+              onClick={() => installPSU(psu)}
               onDragStart={(e) => handleDragStart(e, 'psu', psu)}
               onDragEnd={handleDragEnd}
             >
@@ -418,4 +424,3 @@ function ComponentSelection({ view3D = false }: ComponentSelectionProps) {
 }
 
 export default ComponentSelection;
-

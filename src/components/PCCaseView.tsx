@@ -80,10 +80,10 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
     return { stepNum, text: `Шаг ${stepNum}: ${step.label}`, isNext: false, isDone: false, blocked: false };
   };
 
-  const handleDragOver = (e: React.DragEvent, slotType: string) => {
+  const handleDragOver = (e: React.DragEvent, slotType: string, dragKey = slotType) => {
     e.preventDefault();
     e.stopPropagation();
-    setDragOverSlot(slotType);
+    setDragOverSlot(dragKey);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
@@ -91,7 +91,7 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
     setDragOverSlot(null);
   };
 
-  const handleDrop = (e: React.DragEvent, slotType: string, slotIndex?: number) => {
+  const handleDrop = (e: React.DragEvent, slotType: string) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOverSlot(null);
@@ -120,6 +120,15 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
           break;
 
         case 'motherboard':
+          if (!build.case) {
+            alert('Сначала выберите корпус!');
+            return;
+          }
+          const caseError = checkCaseCompatibility(build.case, componentData);
+          if (caseError) {
+            alert(`❌ ${caseError.reason}\n\n💡 ${caseError.recommendations?.join('\n')}`);
+            return;
+          }
           installMotherboard(componentData);
           break;
 
@@ -192,6 +201,36 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
     <div className="pc-case-container">
       <h2>Визуализация сборки</h2>
 
+      {!build.case ? (
+        <div
+          className={`case-drop-zone ${dragOverSlot === 'case' ? 'drag-over' : ''}`}
+          onDragOver={(e) => handleDragOver(e, 'case')}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, 'case')}
+        >
+          <div className="drop-zone-content">
+            <div className="slot-label">Корпус ПК</div>
+            <span style={{ opacity: 0.65 }}>Перетащите корпус сюда, чтобы начать сборку</span>
+          </div>
+        </div>
+      ) : (
+        <div className="case-info-bar">
+          <div>
+            <div className="component-name" style={{ marginBottom: '0.25rem' }}>{build.case.name}</div>
+            <div className="component-specs">
+              Форм-фактор: {build.case.formFactor.join(', ')} | Макс. GPU: {build.case.maxGPULength}мм | Отсеков: {build.case.driveBays}
+            </div>
+          </div>
+          <button
+            className="remove-btn"
+            onClick={() => removeComponent('case')}
+            title="Удалить корпус"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <div className="pc-case">
         {/* Материнская плата - база для всего */}
         <div 
@@ -250,9 +289,9 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
                 <div 
                   key={index} 
                   className={`slot ${ram ? 'filled' : ''} ${dragOverSlot === `ram-${index}` ? 'drag-over' : ''} ${!build.motherboard ? 'disabled' : ''}`}
-                  onDragOver={(e) => build.motherboard && handleDragOver(e, 'ram')}
+                  onDragOver={(e) => build.motherboard && handleDragOver(e, 'ram', `ram-${index}`)}
                   onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, 'ram', index)}
+                  onDrop={(e) => handleDrop(e, 'ram')}
                 >
                   {!ram ? (
                     <>
@@ -327,9 +366,9 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
                 <div 
                   key={index} 
                   className={`slot ${storage ? 'filled' : ''} ${dragOverSlot === `storage-${index}` ? 'drag-over' : ''} ${!build.motherboard ? 'disabled' : ''}`}
-                  onDragOver={(e) => build.motherboard && handleDragOver(e, 'storage')}
+                  onDragOver={(e) => build.motherboard && handleDragOver(e, 'storage', `storage-${index}`)}
                   onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, 'storage', index)}
+                  onDrop={(e) => handleDrop(e, 'storage')}
                 >
                   {!storage ? (
                     <>
@@ -359,4 +398,3 @@ function PCCaseView({ showOrderHints = false }: PCCaseViewProps) {
 }
 
 export default PCCaseView;
-

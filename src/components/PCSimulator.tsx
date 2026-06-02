@@ -87,6 +87,15 @@ function PCSimulator() {
           break;
 
         case 'motherboard':
+          if (!build.case) {
+            alert('Сначала выберите корпус!');
+            return;
+          }
+          const caseError = checkCaseCompatibility(build.case, data);
+          if (caseError) {
+            alert(`❌ ${caseError.reason}\n\n💡 ${caseError.recommendations?.join('\n')}`);
+            return;
+          }
           installMotherboard(data);
           break;
 
@@ -153,6 +162,7 @@ function PCSimulator() {
 
   const totalPrice = calculateTotalPrice(build);
   const isComplete =
+    build.case !== null &&
     build.motherboard !== null &&
     build.cpu !== null &&
     build.ram.length > 0 &&
@@ -281,13 +291,13 @@ function PCSimulator() {
               </div>
             )}
             <div className="main-container">
-              <ComponentSelection view3D={view3D} />
+              <ComponentSelection />
 
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {view3D ? (
                   <div
-                    className="pc-case-container"
-                    style={{ minHeight: '400px', height: '35vh', border: '2px dashed #4b5563', borderRadius: '12px' }}
+                    className="pc-case-container pc-case-container-3d"
+                    style={{ minHeight: '620px', height: '620px', border: '2px dashed #4b5563', borderRadius: '12px' }}
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
                   >
@@ -297,7 +307,7 @@ function PCSimulator() {
                         Перетащите компоненты сюда
                       </p>
                     </div>
-                    <Scene3D className="pc-case" />
+                    <Scene3D className="pc-case-3d-stage" />
                   </div>
                 ) : (
                   <PCCaseView showOrderHints={!!activeChallenge} />
@@ -385,4 +395,3 @@ function PCSimulator() {
 }
 
 export default PCSimulator;
-
